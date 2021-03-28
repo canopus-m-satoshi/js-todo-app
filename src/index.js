@@ -5,6 +5,16 @@ const onClickAdd = () => {
   const inputText = document.getElementById("add-text").value; // "add todo"に入力した情報を取得
   document.getElementById("add-text").value = ""; // Addボタンをクリックしたらinputエリアのテキストを空にする
 
+  createIncompleteList(inputText);
+};
+
+// TODOsから指定の要素を削除
+const deleteFromIncompleteList = (target) => {
+  document.getElementById("incomplete-list").removeChild(target); // 要素の削除
+};
+
+// 未完了リスト(TODOs)に追加
+const createIncompleteList = (text) => {
   // li 作成
   const li = document.createElement("li");
   li.className = "list-row"; // "list-row"というクラス付与
@@ -12,7 +22,7 @@ const onClickAdd = () => {
   // p (リストテキスト生成)
   const p = document.createElement("p");
   p.className = "list-text"; // "list-text"というクラス付与
-  p.innerText = inputText; // 入力したテキストを表示
+  p.innerText = text; // 入力したテキストを表示
 
   // button(完了)タグ生成
   const completeButton = document.createElement("button");
@@ -38,6 +48,15 @@ const onClickAdd = () => {
     // buttonタグ生成
     const backButton = document.createElement("button");
     backButton.innerText = "Undo";
+    backButton.addEventListener("click", (target) => {
+      // 押されたUndoボタンの親要素(li)をFinished TODOsから削除
+      const deleteTarget = backButton.parentNode;
+      document.getElementById("complete-list").removeChild(deleteTarget);
+
+      // テキストを取得
+      const text = backButton.parentNode.firstElementChild.innerText;
+      createIncompleteList(text);
+    });
 
     // liタグの子要素に各要素を設定
     li.appendChild(p);
@@ -65,11 +84,6 @@ const onClickAdd = () => {
   // 未完了リスト(TODOs)に追加
   const incompleteList = document.getElementById("incomplete-list");
   incompleteList.appendChild(li);
-};
-
-// TODOsから指定の要素を削除
-const deleteFromIncompleteList = (target) => {
-  document.getElementById("incomplete-list").removeChild(target); // 要素の削除
 };
 
 const add = document.getElementById("add-button");
