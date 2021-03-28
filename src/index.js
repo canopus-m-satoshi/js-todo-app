@@ -19,7 +19,33 @@ const onClickAdd = () => {
   completeButton.className = "list-btn";
   completeButton.innerText = "Done";
   completeButton.addEventListener("click", () => {
-    alert("Done!");
+    // 押された完了ボタンの親要素(li)をTODOsから削除
+    deleteFromIncompleteList(completeButton.parentNode);
+
+    // Finished TODOsに追加する
+    const addTarget = completeButton.parentNode;
+
+    // TODO 内容テキスト取得
+    const text = addTarget.firstChild.innerText;
+
+    // li以下を取得
+    addTarget.textContent = null; // 初期化
+
+    const p = document.createElement("p");
+    p.className = "list-text"; // "list-text"というクラス付与
+    p.innerText = text; // 入力したテキストを表示
+
+    // buttonタグ生成
+    const backButton = document.createElement("button");
+    backButton.innerText = "Undo";
+
+    // liタグの子要素に各要素を設定
+    li.appendChild(p);
+    li.appendChild(backButton);
+
+    // 完了リスト(Finished TODOs)に追加
+    const completeList = document.getElementById("complete-list");
+    completeList.appendChild(addTarget);
   });
 
   // button(削除)タグ生成
@@ -28,8 +54,7 @@ const onClickAdd = () => {
   deleteButton.innerText = "Delete";
   deleteButton.addEventListener("click", () => {
     // 押された削除ボタンの親要素(li)をTODOsから削除
-    const deleteTarget = deleteButton.parentNode; // 親要素のnode取得
-    document.getElementById("incomplete-list").removeChild(deleteTarget); // 要素の削除
+    deleteFromIncompleteList(deleteButton.parentNode);
   });
 
   // liタグの子要素に各要素を設定
@@ -40,6 +65,11 @@ const onClickAdd = () => {
   // 未完了リスト(TODOs)に追加
   const incompleteList = document.getElementById("incomplete-list");
   incompleteList.appendChild(li);
+};
+
+// TODOsから指定の要素を削除
+const deleteFromIncompleteList = (target) => {
+  document.getElementById("incomplete-list").removeChild(target); // 要素の削除
 };
 
 const add = document.getElementById("add-button");
